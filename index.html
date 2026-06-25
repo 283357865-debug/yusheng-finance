@@ -8,155 +8,209 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="裕圣财务管理系统">
   <meta property="og:description" content="裕圣店铺收支明细 · 图表分析 · 分类管理 · 数据导出">
-  <meta property="og:image" content="https://283357865-debug.github.io/yusheng-finance/og-cover-v2.jpg">
+  <meta property="og:image" content="https://283357865-debug.github.io/yusheng-finance/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="多店铺财务管理系统">
   <meta name="twitter:description" content="收支明细 · 图表分析 · 预算管理 · 多店铺记账">
-  <meta name="twitter:image" content="https://283357865-debug.github.io/yusheng-finance/og-cover-v2.jpg">
+  <meta name="twitter:image" content="https://283357865-debug.github.io/yusheng-finance/og-cover.jpg">
   <meta name="description" content="多店铺财务管理系统 - 收支明细、图表分析、预算管理、多店铺记账">
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <style>
+
     :root {
-      --bg-primary: #0a0e17;
-      --bg-secondary: #111827;
-      --bg-card: rgba(17, 24, 39, 0.8);
-      --bg-glass: rgba(255, 255, 255, 0.05);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --accent-cyan: #06b6d4;
-      --accent-emerald: #10b981;
-      --accent-rose: #f43f5e;
-      --accent-amber: #f59e0b;
-      --accent-violet: #8b5cf6;
-      --accent-blue: #3b82f6;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+      /* Apple Light Mode */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --bg-card: rgba(255, 255, 255, 0.72);
+      --bg-glass: rgba(0, 0, 0, 0.03);
+      --bg-elevated: #f2f2f7;
+      --border-color: rgba(0, 0, 0, 0.06);
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-muted: #86868b;
+      --accent-blue: #007aff;
+      --accent-green: #34c759;
+      --accent-red: #ff3b30;
+      --accent-orange: #ff9500;
+      --accent-purple: #af52de;
+      --accent-teal: #5ac8fa;
+      --accent-indigo: #5856d6;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 8px 28px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-pill: 980px;
+      --transition: 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    [data-theme="light"] {
-      --bg-primary: #f8fafc;
-      --bg-secondary: #e2e8f0;
-      --bg-card: rgba(255, 255, 255, 0.9);
-      --bg-glass: rgba(255, 255, 255, 0.6);
-      --border-color: rgba(0, 0, 0, 0.1);
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #64748b;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    [data-theme="dark"] {
+      --bg-primary: #000000;
+      --bg-secondary: #1c1c1e;
+      --bg-card: rgba(28, 28, 30, 0.72);
+      --bg-glass: rgba(255, 255, 255, 0.04);
+      --bg-elevated: #2c2c2e;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-muted: #636366;
+      --accent-blue: #0a84ff;
+      --accent-green: #30d158;
+      --accent-red: #ff453a;
+      --accent-orange: #ff9f0a;
+      --accent-purple: #bf5af2;
+      --accent-teal: #64d2ff;
+      --accent-indigo: #5e5ce6;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow: 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 28px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background var(--transition), color var(--transition);
     }
 
-    /* Header */
+    /* ========== Header ========== */
     .header {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 0.5px solid var(--border-color);
+      padding: 8px 20px;
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
     .header-content {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
     }
 
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 600;
-      color: var(--accent-cyan);
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
     }
 
     .logo-icon {
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
+      color: white;
     }
 
     .header-actions {
       display: flex;
-      gap: 8px;
+      gap: 4px;
       flex-wrap: wrap;
     }
 
     .icon-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-glass);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      border: none;
+      background: transparent;
       color: var(--text-secondary);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      transition: all 0.2s;
+      transition: all var(--transition);
+      position: relative;
     }
 
     .icon-btn:hover {
-      background: var(--bg-card);
-      color: var(--accent-cyan);
-      border-color: var(--accent-cyan);
+      background: var(--bg-glass);
+      color: var(--accent-blue);
     }
 
-    /* Main Container */
+    .icon-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* Currency Toggle - Apple Segmented Control */
+    .currency-toggle {
+      display: flex;
+      background: var(--bg-glass);
+      border-radius: var(--radius-pill);
+      padding: 2px;
+      border: 0.5px solid var(--border-color);
+    }
+
+    .currency-toggle button {
+      padding: 6px 16px;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      min-height: 32px;
+    }
+
+    .currency-toggle button.active {
+      background: var(--accent-blue);
+      color: white;
+      box-shadow: 0 1px 4px rgba(0,122,255,0.3);
+    }
+
+    /* ========== Container ========== */
     .container {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 20px;
     }
 
-    /* Summary Cards */
+    /* ========== Summary Cards ========== */
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .summary-card {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
       padding: 20px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: all var(--transition);
     }
 
     .summary-card:hover {
-      transform: translateY(-2px);
+      transform: scale(1.01);
       box-shadow: var(--shadow-lg);
     }
 
@@ -167,34 +221,54 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      font-weight: 500;
     }
+
+    .summary-card .label svg { opacity: 0.6; }
 
     .summary-card .value {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
+      letter-spacing: -0.03em;
       color: var(--text-primary);
+      font-feature-settings: 'tnum';
     }
 
-    .summary-card .value.income { color: var(--accent-emerald); }
-    .summary-card .value.expense { color: var(--accent-rose); }
-    .summary-card .value.balance { color: var(--accent-cyan); }
-    .summary-card .value.budget { color: var(--accent-amber); }
+    .summary-card .value.income { color: var(--accent-green); }
+    .summary-card .value.expense { color: var(--accent-red); }
+    .summary-card .value.balance { color: var(--accent-blue); }
+    .summary-card .value.budget { color: var(--accent-orange); }
 
     .summary-card .change {
       font-size: 12px;
       margin-top: 6px;
+      font-weight: 500;
     }
 
-    .summary-card .change.positive { color: var(--accent-emerald); }
-    .summary-card .change.negative { color: var(--accent-rose); }
+    .summary-card .change.positive { color: var(--accent-green); }
+    .summary-card .change.negative { color: var(--accent-red); }
 
-    /* Filter Section */
+    /* ========== Budget Warning ========== */
+    .budget-warning {
+      background: rgba(255, 149, 0, 0.08);
+      border: 0.5px solid rgba(255, 149, 0, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--accent-orange);
+    }
+
+    /* ========== Filter Section ========== */
     .filter-section {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      margin-bottom: 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
       overflow: hidden;
     }
 
@@ -202,20 +276,23 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
+      padding: 14px 20px;
       cursor: pointer;
       user-select: none;
     }
 
     .filter-header h3 {
       font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-primary);
     }
 
     .filter-toggle {
-      transition: transform 0.3s;
+      transition: transform var(--transition);
       font-size: 12px;
       color: var(--text-muted);
     }
@@ -229,7 +306,7 @@
     }
 
     .filter-body {
-      padding: 0 16px 16px;
+      padding: 0 20px 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 12px;
@@ -245,18 +322,22 @@
       font-size: 12px;
       color: var(--text-muted);
       font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .filter-group input,
     .filter-group select {
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border-color);
       background: var(--bg-glass);
       color: var(--text-primary);
-      font-size: 14px;
+      font-size: 15px;
+      font-family: inherit;
       min-height: 44px;
-      transition: border-color 0.2s;
+      transition: all var(--transition);
+      -webkit-appearance: none;
     }
 
     .filter-group select option,
@@ -269,7 +350,8 @@
     .filter-group input:focus,
     .filter-group select:focus {
       outline: none;
-      border-color: var(--accent-cyan);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
     }
 
     .filter-actions {
@@ -279,76 +361,82 @@
       padding-top: 4px;
     }
 
+    /* ========== Buttons ========== */
     .btn {
-      padding: 10px 18px;
-      border-radius: 10px;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
       border: none;
       font-size: 14px;
       font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all var(--transition);
       min-height: 44px;
       display: flex;
       align-items: center;
       gap: 6px;
+      letter-spacing: -0.01em;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      background: var(--accent-blue);
       color: white;
     }
 
     .btn-primary:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
+      background: #0071e3;
+      transform: scale(1.02);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
     }
 
     .btn-secondary {
       background: var(--bg-glass);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
+      color: var(--accent-blue);
+      border: 0.5px solid var(--border-color);
     }
 
     .btn-secondary:hover {
-      background: var(--bg-card);
-      border-color: var(--accent-cyan);
+      background: var(--bg-elevated);
+      border-color: var(--accent-blue);
     }
 
     .btn-danger {
-      background: var(--accent-rose);
+      background: var(--accent-red);
       color: white;
     }
 
     .btn-danger:hover {
-      opacity: 0.9;
+      opacity: 0.85;
     }
 
     .btn-sm {
-      padding: 6px 12px;
+      padding: 6px 14px;
       font-size: 13px;
       min-height: 36px;
     }
 
-    /* Chart Grid */
+    /* ========== Chart Grid ========== */
     .chart-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     @media (max-width: 768px) {
-      .chart-grid {
-        grid-template-columns: 1fr;
-      }
+      .chart-grid { grid-template-columns: 1fr; }
     }
 
     .chart-card {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
     }
 
     .chart-card.full-width {
@@ -359,40 +447,43 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .chart-title {
       font-size: 15px;
       font-weight: 600;
+      letter-spacing: -0.01em;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-primary);
     }
+
+    .chart-title svg { opacity: 0.5; }
 
     .chart-container {
       height: 280px;
     }
 
     @media (max-width: 768px) {
-      .chart-container {
-        height: 240px;
-      }
+      .chart-container { height: 220px; }
     }
 
-    /* Category Table */
+    /* ========== Cross Table ========== */
     .category-table-wrapper {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .category-table-header {
-      padding: 16px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 16px 20px;
+      border-bottom: 0.5px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -400,50 +491,59 @@
       gap: 12px;
     }
 
-    .category-table {
+    .cross-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
     }
 
-    .category-table th,
-    .category-table td {
+    .cross-table th,
+    .cross-table td {
       padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
+      text-align: right;
+      border-bottom: 0.5px solid var(--border-color);
+      font-feature-settings: 'tnum';
     }
 
-    .category-table th {
+    .cross-table th {
       background: var(--bg-glass);
       font-weight: 600;
       color: var(--text-secondary);
-      font-size: 13px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       white-space: nowrap;
     }
 
-    .category-table tr:hover {
-      background: var(--bg-glass);
-    }
-
-    .category-table td.amount {
-      font-family: 'SF Mono', 'Consolas', monospace;
-      text-align: right;
+    .cross-table td:first-child,
+    .cross-table th:first-child {
+      text-align: left;
       font-weight: 500;
     }
 
-    /* Records Table */
+    .cross-table tr:hover {
+      background: var(--bg-glass);
+    }
+
+    .cross-table tr.total-row {
+      background: var(--bg-glass);
+      font-weight: 700;
+    }
+
+    /* ========== Records Table ========== */
     .records-wrapper {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .records-header {
-      padding: 16px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 16px 20px;
+      border-bottom: 0.5px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -456,13 +556,14 @@
       align-items: center;
       gap: 8px;
       font-size: 15px;
+      font-weight: 600;
     }
 
     .records-count {
-      background: var(--accent-cyan);
+      background: var(--accent-blue);
       color: white;
       padding: 2px 10px;
-      border-radius: 20px;
+      border-radius: var(--radius-pill);
       font-size: 12px;
       font-weight: 600;
     }
@@ -483,7 +584,7 @@
     .records-table td {
       padding: 12px 16px;
       text-align: left;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 0.5px solid var(--border-color);
       white-space: nowrap;
     }
 
@@ -491,7 +592,9 @@
       background: var(--bg-glass);
       font-weight: 600;
       color: var(--text-secondary);
-      font-size: 13px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       position: sticky;
       top: 0;
       z-index: 1;
@@ -502,7 +605,8 @@
     }
 
     .records-table td {
-      font-family: 'SF Mono', 'Consolas', monospace;
+      font-family: 'SF Mono', -apple-system, 'Consolas', monospace;
+      font-feature-settings: 'tnum';
     }
 
     .records-table td:nth-child(3),
@@ -513,60 +617,64 @@
     .type-badge {
       display: inline-flex;
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: var(--radius-pill);
       font-size: 12px;
       font-weight: 600;
     }
 
     .type-badge.income {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-emerald);
+      background: rgba(52, 199, 89, 0.12);
+      color: var(--accent-green);
     }
 
     .type-badge.expense {
-      background: rgba(244, 63, 94, 0.15);
-      color: var(--accent-rose);
+      background: rgba(255, 59, 48, 0.12);
+      color: var(--accent-red);
     }
 
     .action-btns {
       display: flex;
-      gap: 6px;
+      gap: 4px;
     }
 
     .action-btn {
       width: 36px;
       height: 36px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-glass);
-      color: var(--text-secondary);
+      border-radius: var(--radius);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all var(--transition);
       font-size: 14px;
     }
 
     .action-btn:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
+      background: var(--bg-glass);
+      color: var(--accent-blue);
     }
 
     .action-btn.delete:hover {
-      border-color: var(--accent-rose);
-      color: var(--accent-rose);
+      color: var(--accent-red);
     }
 
-    /* Modal */
+    .action-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* ========== Modal - Apple Sheet Style ========== */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -574,7 +682,7 @@
       padding: 16px;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s;
+      transition: all var(--transition);
     }
 
     .modal-overlay.active {
@@ -583,16 +691,15 @@
     }
 
     .modal {
-      background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
       width: 100%;
       max-width: 480px;
       max-height: 90vh;
       overflow-y: auto;
-      transform: scale(0.9) translateY(20px);
-      transition: transform 0.3s;
+      transform: scale(0.95) translateY(10px);
+      transition: transform var(--transition);
+      box-shadow: var(--shadow-lg);
     }
 
     .modal-overlay.active .modal {
@@ -603,13 +710,12 @@
       .modal {
         max-width: 100%;
         max-height: 100%;
-        border-radius: 0;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       }
     }
 
     .modal-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 20px 24px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -617,14 +723,16 @@
 
     .modal-header h3 {
       font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
     .modal-close {
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       border: none;
       background: var(--bg-glass);
@@ -633,17 +741,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      transition: all 0.2s;
+      font-size: 16px;
+      transition: all var(--transition);
     }
 
     .modal-close:hover {
-      background: var(--accent-rose);
+      background: var(--accent-red);
       color: white;
     }
 
     .modal-body {
-      padding: 20px;
+      padding: 8px 24px 20px;
     }
 
     .form-group {
@@ -653,8 +761,8 @@
     .form-group label {
       display: block;
       font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
       font-weight: 500;
     }
 
@@ -662,14 +770,16 @@
     .form-group select,
     .form-group textarea {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-glass);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border-color);
+      background: var(--bg-card);
       color: var(--text-primary);
       font-size: 15px;
+      font-family: inherit;
       min-height: 48px;
-      transition: border-color 0.2s;
+      transition: all var(--transition);
+      -webkit-appearance: none;
     }
 
     .form-group textarea {
@@ -681,7 +791,8 @@
     .form-group select:focus,
     .form-group textarea:focus {
       outline: none;
-      border-color: var(--accent-cyan);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.12);
     }
 
     .form-row {
@@ -691,41 +802,39 @@
     }
 
     @media (max-width: 480px) {
-      .form-row {
-        grid-template-columns: 1fr;
-      }
+      .form-row { grid-template-columns: 1fr; }
     }
 
     .modal-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border-color);
+      padding: 12px 24px 20px;
       display: flex;
       gap: 12px;
       justify-content: flex-end;
     }
 
-    /* Tabs */
+    /* ========== Tabs - Apple Segmented Control ========== */
     .tabs {
       display: flex;
-      gap: 4px;
       background: var(--bg-glass);
-      padding: 4px;
-      border-radius: 12px;
+      padding: 3px;
+      border-radius: var(--radius-pill);
       margin-bottom: 16px;
+      border: 0.5px solid var(--border-color);
     }
 
     .tab {
       flex: 1;
-      padding: 10px 16px;
-      border-radius: 10px;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
       border: none;
       background: transparent;
       color: var(--text-secondary);
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
-      transition: all 0.2s;
-      min-height: 44px;
+      font-family: inherit;
+      transition: all var(--transition);
+      min-height: 36px;
     }
 
     .tab:hover {
@@ -734,29 +843,30 @@
 
     .tab.active {
       background: var(--bg-card);
-      color: var(--accent-cyan);
-      box-shadow: var(--shadow);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Settings Panel */
+    /* ========== Settings ========== */
     .settings-section {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
       padding: 20px;
       margin-bottom: 16px;
     }
 
     .settings-section h4 {
       font-size: 15px;
+      font-weight: 600;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Template List */
     .template-list {
       display: flex;
       flex-direction: column;
@@ -767,295 +877,80 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px;
+      padding: 12px 16px;
       background: var(--bg-glass);
-      border-radius: 10px;
+      border-radius: var(--radius);
       gap: 12px;
     }
 
-    .template-info {
-      flex: 1;
-    }
+    .template-info { flex: 1; }
+    .template-name { font-weight: 500; margin-bottom: 2px; }
+    .template-detail { font-size: 12px; color: var(--text-muted); }
+    .template-actions { display: flex; gap: 4px; }
 
-    .template-name {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .template-detail {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .template-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    /* Pagination */
+    /* ========== Pagination ========== */
     .pagination {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 16px;
-      flex-wrap: wrap;
-    }
-
-    .page-btn {
-      min-width: 44px;
-      height: 44px;
-      padding: 0 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-glass);
-      color: var(--text-secondary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .page-btn:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-    }
-
-    .page-btn.active {
-      background: var(--accent-cyan);
-      color: white;
-      border-color: var(--accent-cyan);
-    }
-
-    .page-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-
-    .empty-state svg {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 16px;
-      opacity: 0.5;
-    }
-
-    .empty-state p {
-      font-size: 15px;
-    }
-
-    /* Loading */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border-color);
-      border-top-color: var(--accent-cyan);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-glass);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-muted);
-    }
-
-    /* Fullscreen */
-    .fullscreen-mode {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 2000;
-      background: var(--bg-primary);
-      overflow-y: auto;
-      padding: 20px;
-    }
-
-    .fullscreen-mode .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-    }
-
-    .fullscreen-mode .container {
-      padding-top: 100px;
-    }
-
-    /* Currency Toggle */
-    .currency-toggle {
-      display: flex;
       gap: 4px;
-      background: var(--bg-glass);
-      padding: 4px;
-      border-radius: 10px;
+      padding: 16px;
     }
 
-    .currency-toggle button {
-      padding: 8px 14px;
-      border-radius: 8px;
+    .pagination button {
+      min-width: 36px;
+      height: 36px;
+      border-radius: var(--radius-pill);
       border: none;
       background: transparent;
       color: var(--text-secondary);
       cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      transition: all var(--transition);
     }
 
-    .currency-toggle button.active {
-      background: var(--bg-card);
-      color: var(--accent-cyan);
-    }
-
-    /* Mobile Adjustments */
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .store-tabs {
-        justify-content: center;
-      }
-
-      .header-actions {
-        justify-content: center;
-      }
-
-      .summary-card .value {
-        font-size: 20px;
-      }
-
-      .filter-body {
-        grid-template-columns: 1fr;
-      }
-
-      .records-header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .records-header .btn {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-    /* Budget Warning */
-    .budget-warning {
-      background: rgba(244, 63, 94, 0.1);
-      border: 1px solid var(--accent-rose);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--accent-rose);
-    }
-
-    .budget-warning svg {
-      flex-shrink: 0;
-    }
-
-    /* Cross Table */
-    .cross-table-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .cross-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      min-width: 600px;
-    }
-
-    .cross-table th,
-    .cross-table td {
-      padding: 10px 12px;
-      text-align: right;
-      border: 1px solid var(--border-color);
-    }
-
-    .cross-table th {
+    .pagination button:hover {
       background: var(--bg-glass);
-      font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-primary);
     }
 
-    .cross-table th:first-child,
-    .cross-table td:first-child {
-      text-align: left;
-      position: sticky;
-      left: 0;
-      background: var(--bg-card);
-      z-index: 1;
+    .pagination button.active {
+      background: var(--accent-blue);
+      color: white;
     }
 
-    .cross-table th:first-child {
-      z-index: 2;
-      background: var(--bg-glass);
+    .pagination button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
 
-    /* Tooltip */
-    .tooltip {
-      position: relative;
+    .pagination span {
+      padding: 0 8px;
+      color: var(--text-muted);
+      font-size: 14px;
     }
 
+    .tooltip { position: relative; }
     .tooltip::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: 100%;
+      bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
-      padding: 6px 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 12px;
+      background: var(--bg-elevated);
+      border: 0.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 500;
       white-space: nowrap;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.2s;
+      transition: all var(--transition);
       z-index: 100;
+      color: var(--text-primary);
     }
 
     .tooltip:hover::after {
@@ -1063,23 +958,51 @@
       visibility: visible;
     }
 
-    /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .animate-in {
-      animation: fadeIn 0.3s ease-out;
+      animation: fadeIn 0.35s ease-out;
     }
-  </style>
+
+
+    /* SVG Icon Global Styles */
+    svg[xmlns] {
+      display: inline-block;
+      vertical-align: -0.125em;
+      flex-shrink: 0;
+    }
+    
+    .logo-icon svg { width: 18px; height: 18px; }
+    .icon-btn svg { width: 18px; height: 18px; }
+    .chart-title svg { width: 16px; height: 16px; }
+    .summary-card .label svg { width: 14px; height: 14px; }
+    .action-btn svg { width: 15px; height: 15px; }
+    .btn svg { width: 14px; height: 14px; }
+    .modal-header h3 svg { width: 18px; height: 18px; }
+    .settings-section h4 svg { width: 16px; height: 16px; }
+    .records-header h3 svg { width: 16px; height: 16px; }
+    .budget-warning svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .filter-header h3 svg { width: 16px; height: 16px; }
+    .modal-body svg { width: 14px; height: 14px; }
+    .filter-body svg { width: 13px; height: 13px; }
+
+    /* Scrollbar - Apple Style */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; opacity: 0.3; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+    </style>
 </head>
 <body data-theme="dark">
   <!-- Header -->
   <header class="header">
     <div class="header-content">
       <div class="logo">
-        <div class="logo-icon">💰</div>
+        <div class="logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></div>
         <span>裕圣财务管理系统</span>
       </div>
       
@@ -1088,13 +1011,13 @@
           <button id="btnCNY" class="active" onclick="setCurrency('CNY')">¥ CNY</button>
           <button id="btnUSD" onclick="setCurrency('USD')">$ USD</button>
         </div>
-        <button class="icon-btn tooltip" data-tooltip="预算设置" onclick="openModal('budgetModal')">📊</button>
-        <button class="icon-btn tooltip" data-tooltip="模板管理" onclick="openModal('templateModal')">📋</button>
-        <button class="icon-btn tooltip" data-tooltip="分类管理" onclick="openModal('categoryModal')">🏷️</button>
-        <button class="icon-btn tooltip" data-tooltip="数据导入" onclick="openModal('importModal')">📥</button>
-        <button class="icon-btn tooltip" data-tooltip="数据导出" onclick="exportData()">📤</button>
-        <button class="icon-btn tooltip" data-tooltip="主题切换" onclick="toggleTheme()">🌙</button>
-        <button class="icon-btn tooltip" data-tooltip="全屏模式" onclick="toggleFullscreen()">⛶</button>
+        <button class="icon-btn tooltip" data-tooltip="预算设置" onclick="openModal('budgetModal')"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></button>
+        <button class="icon-btn tooltip" data-tooltip="模板管理" onclick="openModal('templateModal')"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></button>
+        <button class="icon-btn tooltip" data-tooltip="分类管理" onclick="openModal('categoryModal')"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
+        <button class="icon-btn tooltip" data-tooltip="数据导入" onclick="openModal('importModal')"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+        <button class="icon-btn tooltip" data-tooltip="数据导出" onclick="exportData()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>
+        <button class="icon-btn tooltip" data-tooltip="主题切换" onclick="toggleTheme()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+        <button class="icon-btn tooltip" data-tooltip="全屏模式" onclick="toggleFullscreen()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
       </div>
     </div>
   </header>
@@ -1109,7 +1032,7 @@
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
       <div>
-        <strong>⚠️ 预算超支提醒</strong>
+        <strong><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 预算超支提醒</strong>
         <p id="budgetWarningText" style="margin-top: 4px; font-size: 14px;"></p>
       </div>
     </div>
@@ -1117,17 +1040,17 @@
     <!-- Summary Cards -->
     <div class="summary-grid">
       <div class="summary-card">
-        <div class="label">💵 总收入 / Total Income</div>
+        <div class="label"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg> 总收入 / Total Income</div>
         <div class="value income" id="totalIncome">¥0</div>
         <div class="change" id="incomeChange"></div>
       </div>
       <div class="summary-card">
-        <div class="label">💸 总支出 / Total Expense</div>
+        <div class="label"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg> 总支出 / Total Expense</div>
         <div class="value expense" id="totalExpense">¥0</div>
         <div class="change" id="expenseChange"></div>
       </div>
       <div class="summary-card">
-        <div class="label">💼 净结余 / Net Balance</div>
+        <div class="label"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg> 净结余 / Net Balance</div>
         <div class="value balance" id="netBalance">¥0</div>
         <div class="change" id="balanceChange"></div>
       </div>
@@ -1136,7 +1059,7 @@
     <!-- Filter Section -->
     <div class="filter-section collapsed" id="filterSection">
       <div class="filter-header" onclick="toggleFilter()">
-        <h3>🔍 筛选条件 / Filters <span id="filterCount"></span></h3>
+        <h3><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 筛选条件 / Filters <span id="filterCount"></span></h3>
         <span class="filter-toggle">▼</span>
       </div>
       <div class="filter-body">
@@ -1191,37 +1114,37 @@
     <div class="chart-grid">
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">📊 月度收支对比 / Monthly Overview</div>
+          <div class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> 月度收支对比 / Monthly Overview</div>
         </div>
         <div class="chart-container" id="monthlyChart"></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">🥧 支出分类占比 / Expense Breakdown</div>
+          <div class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg> 支出分类占比 / Expense Breakdown</div>
         </div>
         <div class="chart-container" id="expensePieChart"></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">📈 收支趋势 / Income & Expense Trend</div>
+          <div class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 收支趋势 / Income &amp; Expense Trend</div>
         </div>
         <div class="chart-container" id="trendChart"></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">🏆 分类排行 / Category Ranking</div>
+          <div class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> 分类排行 / Category Ranking</div>
         </div>
         <div class="chart-container" id="rankingChart"></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">📉 累计余额曲线 / Cumulative Balance</div>
+          <div class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> 累计余额曲线 / Cumulative Balance</div>
         </div>
         <div class="chart-container" id="cumulativeChart"></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
-          <div class="chart-title">💹 收入分类占比 / Income Breakdown</div>
+          <div class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg> 收入分类占比 / Income Breakdown</div>
         </div>
         <div class="chart-container" id="incomePieChart"></div>
       </div>
@@ -1230,7 +1153,7 @@
     <!-- Category Monthly Detail -->
     <div class="category-table-wrapper">
       <div class="category-table-header">
-        <h3 class="chart-title">📋 分类月度明细 / Category Monthly Detail</h3>
+        <h3 class="chart-title"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg> 分类月度明细 / Category Monthly Detail</h3>
         <select id="detailCategory" onchange="if(this.value==='__add_new__'){handleDetailCategoryChange()}else{renderDetailTable()}" style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-glass); color: var(--text-primary);">
         </select>
       </div>
@@ -1245,9 +1168,9 @@
     <!-- Records Table -->
     <div class="records-wrapper">
       <div class="records-header">
-        <h3>📝 收支记录 / Records <span class="records-count" id="recordsCount">0</span></h3>
+        <h3><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> 收支记录 / Records <span class="records-count" id="recordsCount">0</span></h3>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button class="btn btn-secondary btn-sm" onclick="exportFilteredExcel()">📊 导出Excel</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportFilteredExcel()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg> 导出Excel</button>
           <button class="btn btn-primary" onclick="openModal('recordModal')">+ 添加记录</button>
         </div>
       </div>
@@ -1275,7 +1198,7 @@
   <div class="modal-overlay" id="recordModal">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="recordModalTitle">➕ 添加记录 / Add Record</h3>
+        <h3 id="recordModalTitle"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 添加记录 / Add Record</h3>
         <button class="modal-close" onclick="closeModal('recordModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -1328,7 +1251,7 @@
   <div class="modal-overlay" id="budgetModal">
     <div class="modal">
       <div class="modal-header">
-        <h3>📊 月度预算设置 / Budget Settings</h3>
+        <h3><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> 月度预算设置 / Budget Settings</h3>
         <button class="modal-close" onclick="closeModal('budgetModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -1353,12 +1276,12 @@
   <div class="modal-overlay" id="templateModal">
     <div class="modal">
       <div class="modal-header">
-        <h3>📋 固定支出模板 / Expense Templates</h3>
+        <h3><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> 固定支出模板 / Expense Templates</h3>
         <button class="modal-close" onclick="closeModal('templateModal')">✕</button>
       </div>
       <div class="modal-body">
         <div class="settings-section">
-          <h4>➕ 添加模板 / Add Template</h4>
+          <h4><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 添加模板 / Add Template</h4>
           <div class="form-group">
             <label>模板名称 / Template Name</label>
             <input type="text" id="templateName" placeholder="例如: 月租">
@@ -1389,7 +1312,7 @@
   <div class="modal-overlay" id="categoryModal">
     <div class="modal">
       <div class="modal-header">
-        <h3>🏷️ 分类管理 / Category Management</h3>
+        <h3><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 分类管理 / Category Management</h3>
         <button class="modal-close" onclick="closeModal('categoryModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -1422,7 +1345,7 @@
   <div class="modal-overlay" id="importModal">
     <div class="modal">
       <div class="modal-header">
-        <h3>📥 数据导入 / Import Data</h3>
+        <h3><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 数据导入 / Import Data</h3>
         <button class="modal-close" onclick="closeModal('importModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -1431,7 +1354,7 @@
           <input type="file" id="importFile" accept=".json" style="padding: 10px;">
         </div>
         <div style="margin-top: 16px; padding: 12px; background: var(--bg-glass); border-radius: 10px; font-size: 13px; color: var(--text-muted);">
-          <p>⚠️ 导入将覆盖现有数据，请确认文件完整性</p>
+          <p><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 导入将覆盖现有数据，请确认文件完整性</p>
         </div>
       </div>
       <div class="modal-footer">
@@ -1604,7 +1527,7 @@
       const allCategories = [...getCategories().expense, ...getCategories().income];
       categorySelect.innerHTML = '<option value="">全部 / All</option>' +
         allCategories.map(c => `<option value="${c}">${c}</option>`).join('') +
-        '<option value="__add_new__">➕ 添加新分类...</option>';
+        '<option value="__add_new__"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 添加新分类...</option>';
 
       // Months
       const monthSelect = document.getElementById('filterMonth');
@@ -1615,7 +1538,7 @@
       // Detail category
       const detailSelect = document.getElementById('detailCategory');
       detailSelect.innerHTML = getCategories().expense.map(c => `<option value="${c}">${c}</option>`).join('') +
-        '<option value="__add_new__">➕ 添加新分类...</option>';
+        '<option value="__add_new__"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 添加新分类...</option>';
     }
 
     function handleFilterCategoryChange() {
@@ -1744,8 +1667,8 @@
           <td style="font-family: inherit; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${r.note || '-'}</td>
           <td>
             <div class="action-btns">
-              <button class="action-btn" onclick="editRecord(${r.id})" title="编辑">✏️</button>
-              <button class="action-btn delete" onclick="deleteRecord(${r.id})" title="删除">🗑️</button>
+              <button class="action-btn" onclick="editRecord(${r.id})" title="编辑"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+              <button class="action-btn delete" onclick="deleteRecord(${r.id})" title="删除"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
             </div>
           </td>
         </tr>
@@ -1815,7 +1738,7 @@
       const select = document.getElementById('recordCategory');
       const categories = type === '收入' ? getCategories().income : getCategories().expense;
       select.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('') + 
-        '<option value="__add_new__">➕ 添加新分类...</option>';
+        '<option value="__add_new__"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 添加新分类...</option>';
     }
 
     function handleCategoryChange(selectId) {
@@ -1877,7 +1800,7 @@
       closeModal('recordModal');
       document.getElementById('recordForm').reset();
       document.getElementById('recordId').value = '';
-      document.getElementById('recordModalTitle').textContent = '➕ 添加记录 / Add Record';
+      document.getElementById('recordModalTitle').textContent = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 添加记录 / Add Record';
       setDefaultDate();
       renderFilters();
       renderAll();
@@ -1895,7 +1818,7 @@
       document.getElementById('recordCurrency').value = record.currency;
       document.getElementById('recordAmount').value = record.amount;
       document.getElementById('recordNote').value = record.note || '';
-      document.getElementById('recordModalTitle').textContent = '✏️ 编辑记录 / Edit Record';
+      document.getElementById('recordModalTitle').textContent = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg> 编辑记录 / Edit Record';
       openModal('recordModal');
     }
 
@@ -1950,7 +1873,7 @@
           </div>
           <div class="template-actions">
             <button class="btn btn-primary btn-sm" onclick="applyTemplate(${i})">使用</button>
-            <button class="action-btn delete" onclick="deleteTemplate(${i})">🗑️</button>
+            <button class="action-btn delete" onclick="deleteTemplate(${i})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
           </div>
         </div>
       `).join('');
@@ -1996,8 +1919,8 @@
             <div class="template-name">${c}</div>
           </div>
           <div class="template-actions">
-            <button class="action-btn" onclick="editCategory('expense', ${i})">✏️</button>
-            <button class="action-btn delete" onclick="deleteCategory('expense', ${i})">🗑️</button>
+            <button class="action-btn" onclick="editCategory('expense', ${i})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+            <button class="action-btn delete" onclick="deleteCategory('expense', ${i})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
           </div>
         </div>
       `).join('');
@@ -2008,8 +1931,8 @@
             <div class="template-name">${c}</div>
           </div>
           <div class="template-actions">
-            <button class="action-btn" onclick="editCategory('income', ${i})">✏️</button>
-            <button class="action-btn delete" onclick="deleteCategory('income', ${i})">🗑️</button>
+            <button class="action-btn" onclick="editCategory('income', ${i})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+            <button class="action-btn delete" onclick="deleteCategory('income', ${i})"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
           </div>
         </div>
       `).join('');
@@ -2077,7 +2000,7 @@
             <div class="template-name">${month}</div>
             <div class="template-detail">${formatAmount(amount)}</div>
           </div>
-          <button class="action-btn delete" onclick="deleteBudget('${month}')">🗑️</button>
+          <button class="action-btn delete" onclick="deleteBudget('${month}')"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
         </div>
       `).join('');
     }
@@ -2201,7 +2124,7 @@
       const isDark = document.body.getAttribute('data-theme') === 'dark';
       const textColor = isDark ? '#94a3b8' : '#475569';
       const axisLineColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-      const bgColor = isDark ? 'rgba(15,23,42,0.9)' : 'rgba(255,255,255,0.9)';
+      const bgColor = isDark ? 'rgba(28,28,30,0.9)' : 'rgba(255,255,255,0.9)';
 
       const records = filteredRecords;
 
@@ -2226,8 +2149,8 @@
         xAxis: { type: 'category', data: months, axisLine: { lineStyle: { color: axisLineColor } }, axisLabel: { color: textColor } },
         yAxis: { type: 'value', axisLine: { lineStyle: { color: axisLineColor } }, axisLabel: { color: textColor, formatter: v => formatAmount(v, false) }, splitLine: { lineStyle: { color: axisLineColor } } },
         series: [
-          { name: '收入', type: 'bar', data: incomeData, itemStyle: { color: '#10b981' }, barWidth: '30%' },
-          { name: '支出', type: 'bar', data: expenseData, itemStyle: { color: '#f43f5e' }, barWidth: '30%' }
+          { name: '收入', type: 'bar', data: incomeData, itemStyle: { color: '#30d158' }, barWidth: '30%' },
+          { name: '支出', type: 'bar', data: expenseData, itemStyle: { color: '#ff453a' }, barWidth: '30%' }
         ]
       });
 
@@ -2283,8 +2206,8 @@
         xAxis: { type: 'category', data: months, axisLine: { lineStyle: { color: axisLineColor } }, axisLabel: { color: textColor } },
         yAxis: { type: 'value', axisLine: { lineStyle: { color: axisLineColor } }, axisLabel: { color: textColor, formatter: v => formatAmount(v, false) }, splitLine: { lineStyle: { color: axisLineColor } } },
         series: [
-          { name: '收入', type: 'line', smooth: true, data: incomeData, itemStyle: { color: '#10b981' }, areaStyle: { color: 'rgba(16, 185, 129, 0.1)' } },
-          { name: '支出', type: 'line', smooth: true, data: expenseData, itemStyle: { color: '#f43f5e' }, areaStyle: { color: 'rgba(244, 63, 94, 0.1)' } }
+          { name: '收入', type: 'line', smooth: true, data: incomeData, itemStyle: { color: '#30d158' }, areaStyle: { color: 'rgba(16, 185, 129, 0.1)' } },
+          { name: '支出', type: 'line', smooth: true, data: expenseData, itemStyle: { color: '#ff453a' }, areaStyle: { color: 'rgba(244, 63, 94, 0.1)' } }
         ]
       });
 
@@ -2300,8 +2223,8 @@
           data: sortedExpense.map(e => e[1]).reverse(),
           itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: '#06b6d4' },
-              { offset: 1, color: '#3b82f6' }
+              { offset: 0, color: '#0a84ff' },
+              { offset: 1, color: '#5856d6' }
             ]),
             borderRadius: [0, 4, 4, 0]
           },
@@ -2327,7 +2250,7 @@
           type: 'line',
           data: cumulativeData,
           smooth: true,
-          lineStyle: { width: 3, color: '#06b6d4' },
+          lineStyle: { width: 3, color: '#0a84ff' },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: 'rgba(6, 182, 212, 0.3)' },
@@ -2336,7 +2259,7 @@
           },
           symbol: 'circle',
           symbolSize: 6,
-          itemStyle: { color: '#06b6d4' }
+          itemStyle: { color: '#0a84ff' }
         }]
       });
     }
