@@ -573,6 +573,54 @@
       font-weight: 600;
     }
 
+    .type-filter-bar {
+      padding: 0 16px 12px;
+    }
+
+    .type-filter-bar .segmented-control {
+      max-width: 280px;
+    }
+
+    /* Segmented Control (Apple Style) */
+    .segmented-control {
+      display: inline-flex;
+      position: relative;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-pill);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .segmented-control-indicator {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      height: calc(100% - 4px);
+      background: var(--action-color);
+      border-radius: var(--radius-pill);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+
+    .segmented-control-segment {
+      position: relative;
+      z-index: 1;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+
+    .segmented-control-segment.active {
+      color: #fff;
+      font-weight: 600;
+    }
+
     .records-table-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -1076,7 +1124,7 @@
         </div>
         <div class="filter-group">
           <label>类型 / Type</label>
-          <select id="filterType" onchange="applyFilters()">
+          <select id="filterType" onchange="syncTypeSegmentedFromSelect();applyFilters()">
             <option value="">全部 / All</option>
             <option value="收入">收入 / Income</option>
             <option value="支出">支出 / Expense</option>
@@ -1177,6 +1225,15 @@
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <button class="btn btn-secondary btn-sm" onclick="exportFilteredExcel()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg> 导出Excel</button>
           <button class="btn btn-primary" onclick="openModal('recordModal')">+ 添加记录</button>
+        </div>
+      </div>
+      <!-- Type Quick Filter -->
+      <div class="type-filter-bar">
+        <div class="segmented-control" id="typeFilterControl">
+          <div class="segmented-control-indicator" id="typeFilterIndicator"></div>
+          <div class="segmented-control-segment active" data-value="" onclick="setTypeFilter(this, '')">全部</div>
+          <div class="segmented-control-segment" data-value="收入" onclick="setTypeFilter(this, '收入')">收入</div>
+          <div class="segmented-control-segment" data-value="支出" onclick="setTypeFilter(this, '支出')">支出</div>
         </div>
       </div>
       <div class="records-table-wrapper">
@@ -1437,6 +1494,17 @@
     let charts = {};
 
     // ============ Initialization ============
+    // ============ Segmented Control Indicator ============
+    function updateSegmentedIndicator(controlId, indicatorId) {
+      const control = document.getElementById(controlId);
+      const indicator = document.getElementById(indicatorId);
+      const active = control.querySelector('.segmented-control-segment.active');
+      if (active && indicator) {
+        indicator.style.width = active.offsetWidth + 'px';
+        indicator.style.transform = `translateX(${active.offsetLeft - 2}px)`;
+      }
+    }
+
     function init() {
       loadData();
       setTheme(appData.settings?.theme || 'dark');
@@ -1447,6 +1515,7 @@
       setCurrency(appData.settings?.defaultCurrency || 'CNY');
       renderAll();
       setDefaultDate();
+      setTimeout(() => updateSegmentedIndicator('typeFilterControl', 'typeFilterIndicator'), 100);
     }
 
     function loadData() {
@@ -1623,6 +1692,10 @@
       document.getElementById('filterMinAmount').value = '';
       document.getElementById('filterMaxAmount').value = '';
       document.getElementById('filterKeyword').value = '';
+      // Sync segmented control
+      document.querySelectorAll('#typeFilterControl .segmented-control-segment').forEach(s => s.classList.remove('active'));
+      document.querySelector('#typeFilterControl .segmented-control-segment[data-value=""]').classList.add('active');
+      updateSegmentedIndicator('typeFilterControl', 'typeFilterIndicator');
       applyFilters();
     }
 
@@ -1634,6 +1707,25 @@
 
     function toggleFilter() {
       document.getElementById('filterSection').classList.toggle('collapsed');
+    }
+
+    // ============ Type Quick Filter ============
+    function setTypeFilter(el, value) {
+      // Update segmented control UI
+      document.querySelectorAll('#typeFilterControl .segmented-control-segment').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      updateSegmentedIndicator('typeFilterControl', 'typeFilterIndicator');
+      // Sync with hidden filterType select
+      document.getElementById('filterType').value = value;
+      applyFilters();
+    }
+
+    function syncTypeSegmentedFromSelect() {
+      const val = document.getElementById('filterType').value;
+      document.querySelectorAll('#typeFilterControl .segmented-control-segment').forEach(s => {
+        s.classList.toggle('active', s.dataset.value === val);
+      });
+      updateSegmentedIndicator('typeFilterControl', 'typeFilterIndicator');
     }
 
     // ============ Records Management ============
